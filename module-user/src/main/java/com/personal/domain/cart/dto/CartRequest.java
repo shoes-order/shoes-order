@@ -13,7 +13,7 @@ public sealed interface CartRequest permits
             Long width,
             @NotNull
             Long qty,
-            boolean customYN
+            boolean customyn
     ) implements CartRequest {
     }
 
@@ -22,7 +22,7 @@ public sealed interface CartRequest permits
             Long width,
             @NotNull
             Long qty,
-            boolean customYN
+            boolean customyn
     ) implements CartRequest {
     }
 }

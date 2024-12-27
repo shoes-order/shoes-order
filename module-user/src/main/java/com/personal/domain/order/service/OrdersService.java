@@ -104,14 +104,14 @@ public class OrdersService {
         // OrdersDetail에 저장
         ArrayList<OrdersDetail> list = new ArrayList<>();
         for (CartList.Cart cart : cartList) {
-            Product product = productCommonService.getProductByIdAndStoreId(cart.productId() , cart.storeId());
-            Long sumAmt = cart.customYN() ? cart.basePrice() + cart.customPrice() : cart.basePrice();
+            Product product = productCommonService.getProductByIdAndStoreIdAndTypeProduct(cart.productId() , cart.storeId());
+            Long sumAmt = cart.customyn() ? cart.basePrice() + cart.customPrice() : cart.basePrice();
             OrdersDetail ordersDetail = OrdersDetail.builder()
                     .productName(cart.productName())
                     .length(cart.length())
                     .width(cart.width())
                     .qty(cart.qty())
-                    .customYN(cart.customYN())
+                    .customYN(cart.customyn())
                     .customPrice(cart.customPrice())
                     .basePrice(cart.basePrice())
                     .amt(sumAmt)

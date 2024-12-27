@@ -48,13 +48,13 @@ public class CartService {
 
         User user = userCommonService.getUserById(authUser.getUserId());
         Store store = storeCommonService.getStoreById(storeId);
-        Product product = productCommonService.getProductByIdAndStoreId(addCart.productId() , storeId);
+        Product product = productCommonService.getProductByIdAndStoreIdAndTypeProduct(addCart.productId() , storeId);
 
         Cart cart = Cart.builder()
                 .length(addCart.length())
                 .width(addCart.width())
                 .qty(addCart.qty())
-                .customYN(addCart.customYN())
+                .customyn(addCart.customyn())
                 .user(user)
                 .store(store)
                 .product(product)
@@ -66,7 +66,8 @@ public class CartService {
     @Transactional
     public void modCart(AuthUser authUser , Long storeId , Long cartId , CartRequest.ModCart modCart) {
         Cart cart = cartRepository.findByIdAndUserIdAndStoreId(cartId , authUser.getUserId(), storeId).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_CART));
-        cart.updateCart(modCart.length(), modCart.width(), modCart.qty(), modCart.customYN());
+        cart.updateCart(modCart.length(), modCart.width(), modCart.qty(), modCart.customyn());
+        cartRepository.save(cart);
     }
 
     @Transactional
