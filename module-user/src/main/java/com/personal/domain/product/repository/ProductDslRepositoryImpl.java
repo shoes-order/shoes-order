@@ -36,7 +36,8 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
                         store.id.eq(storeId) ,
                         product.type.eq(ProductType.PRODUCT) ,
                         searchProducts(getProduct.type() , getProduct.value()) ,
-                        searchPrice(getProduct.minPrice(), getProduct.maxPrice())
+                        searchPrice(getProduct.minPrice(), getProduct.maxPrice()) ,
+                        product.isDeleted.eq(false)
                 )
                 .orderBy(getProduct.sort().equals("ASC") ? product.id.asc() : product.id.desc())
                 .fetch();
