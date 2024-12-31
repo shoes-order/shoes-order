@@ -11,7 +11,6 @@ public sealed interface OutputRequest permits
 
     record CreateOutPut(
             Long productId,
-            ProductType type,
             String name,
             Long size,
             Long qty,

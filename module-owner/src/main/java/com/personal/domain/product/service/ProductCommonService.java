@@ -1,6 +1,7 @@
 package com.personal.domain.product.service;
 
 import com.personal.common.code.ResponseCode;
+import com.personal.common.exception.custom.NotFoundException;
 import com.personal.domain.product.exception.NotFoundProductException;
 import com.personal.domain.product.repository.ProductRepository;
 import com.personal.entity.product.Product;
@@ -19,6 +20,7 @@ public class ProductCommonService {
     }
 
     public Product getStoreProduct(Long storeId, Long productId) {
-        return productRepository.getStoreProduct(storeId, productId);
+        return productRepository.getStoreProduct(storeId, productId)
+                .orElseThrow(()-> new NotFoundException(ResponseCode.NOT_FOUND_PRODUCT));
     }
 }
