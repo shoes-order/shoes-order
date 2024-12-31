@@ -17,7 +17,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequestMapping("api/v1/users")
 @RestController
-@Secured({UserRole.Authority.OWNER})
 @RequiredArgsConstructor
 public class OwnerController {
     private final OwnerService ownerService;
@@ -50,8 +49,7 @@ public class OwnerController {
     public ResponseEntity<SuccessResponse<Void>> login(
             @Valid @RequestBody OwnerRequest.Register register) {
         ownerService.register(register);
-        return ResponseEntity.ok()
-                .body(SuccessResponse.of(null));
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 
     /**
@@ -61,6 +59,7 @@ public class OwnerController {
      * @return SuccessResponse
      */
     @PostMapping("/logout")
+    @Secured({UserRole.Authority.OWNER})
     public ResponseEntity<SuccessResponse<Void>> logout(
             @AuthenticationPrincipal AuthUser authUser
     ) {
@@ -79,6 +78,7 @@ public class OwnerController {
      * @Return SuccessResponse
      */
     @PatchMapping
+    @Secured({UserRole.Authority.OWNER})
     public ResponseEntity<SuccessResponse<Void>> updateProfile(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody OwnerRequest.UpdateProfile updateProfile
@@ -96,6 +96,7 @@ public class OwnerController {
      * @Return SuccessResponse
      */
     @GetMapping
+    @Secured({UserRole.Authority.OWNER})
     public ResponseEntity<SuccessResponse<OwnerResponse.GetProfile>> getProfile(
             @AuthenticationPrincipal AuthUser authUser
     ) {

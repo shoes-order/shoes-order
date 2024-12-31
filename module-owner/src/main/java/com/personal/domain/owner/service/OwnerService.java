@@ -49,17 +49,16 @@ public class OwnerService {
 
     @Transactional
     public void register(OwnerRequest.Register register) {
-
-
         //이메일이 중복
         if (ownerRepository.findByEmail(register.email()).isPresent()) {
             throw new BadRequestException(ResponseCode.EMAIL_ALREADY_REGISTERED);
         }
+
         if (!passwordVerification(register.password())) {
             throw new BadRequestException(ResponseCode.INVALID_PASSWORD_FORMAT);
         }
         String encryptPassword = passwordEncoder.encode(register.password());
-        User owner = new User(register.email(), encryptPassword, register.name(), UserRole.ROLE_ADMIN);
+        User owner = new User(register.email(), encryptPassword, register.name(), UserRole.ROLE_OWNER);
         ownerRepository.save(owner);
     }
 

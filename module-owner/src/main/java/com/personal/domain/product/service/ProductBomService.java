@@ -55,23 +55,14 @@ public class ProductBomService {
 
     @Transactional
     public void updateBom(ProductBomRequest.UpdateBom updateBom, Long storeId, Long productId, Long bomId, AuthUser authUser) {
-        Store store = storeCommonService.getStores(storeId);
-        if (!authUser.getUserId().equals(store.getUser().getId())) {
-            throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_UPDATE);
-        }
-        productCommonService.getProducts(productId);
-        //완제품 객체
-        Product baseProduct = productCommonService.getProducts(updateBom.baseProductId());
+        // TODO : userId , storeId , productId 를 한번에 검증할수 있는 쿼리 구현
+
 
         //원자재
         Product materialProduct = productCommonService.getProducts(updateBom.materialProductId());
 
         ProductBom productBom = productBomCommonService.getBoms(bomId);
-
-        Long previusBaseQty = productBom.getBaseQty();
-        Long previusMaterialQty = productBom.getMaterialQty();
         productBom.updateBom(
-                baseProduct,
                 updateBom.baseProductQty(),
                 materialProduct,
                 updateBom.materialProductQty()
@@ -79,6 +70,9 @@ public class ProductBomService {
     }
 
     public List<ProductBomResponse.GetInfos> getBoms(Long storeId, Long productId) {
+        // TODO : userId , storeId , productId 를 한번에 검증할수 있는 쿼리 구현
+        //        왜냐 다른 매장의 상품까지도 조회할수 있게 되어버림
+
         storeCommonService.getStores(storeId);
         productCommonService.getProducts(productId);
 
@@ -97,6 +91,16 @@ public class ProductBomService {
 
     @Transactional
     public void deleteBom(Long storeId, Long productId, Long bomId, AuthUser authUser) {
+        // TODO : userId , storeId , productId , bomId 를 한번에 검증할수 있는 쿼리 구현
+        /**
+         * select *
+         * from bom b
+         *  inner join product p on (p.id = b.baseProductId and p.id = :productId)
+         *  inner join store s on (s.id = p.storeId and s.id = :storeId)
+         *  inner join user u on (u.id = s.userId and u.id = :userId)
+         * where b.bomId = :bomId
+         * */
+
         Store store = storeCommonService.getStores(storeId);
         if (!authUser.getUserId().equals(store.getUser().getId())) {
             throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_DELETE);
@@ -104,8 +108,7 @@ public class ProductBomService {
         productCommonService.getProducts(productId);
 
 
+        // TODO : deleteById가 아닌 bomId로 pruductBom 객체를 조회해서 영속성 컨텍스트 생명주기로 영속시킨 다음에 삭제할 것
         productBomRepository.deleteById(bomId);
-
-
     }
 }

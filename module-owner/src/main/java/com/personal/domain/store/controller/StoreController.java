@@ -38,7 +38,7 @@ public class StoreController {
     }
 
     /**
-     * 매장 조회(자신이 등록한 매장)
+     * 매장 조회(자신이 등록한 매장들)
      */
     @GetMapping
     public ResponseEntity<SuccessResponse<List<StoreResponse.GetStores>>> getStores(
@@ -46,6 +46,19 @@ public class StoreController {
     ) {
         return ResponseEntity.ok()
                 .body(SuccessResponse.of(storeService.getStores(authUser)));
+    }
+
+    /**
+     * 매장 조회(자신이 등록한 매장 하나)
+     * TODO : 작업 진행 할 것
+     */
+    @GetMapping("/{storeId}")
+    public ResponseEntity<SuccessResponse<List<StoreResponse.GetStores>>> getStore(
+            @AuthenticationPrincipal AuthUser authUser ,
+            @PathVariable Long storeId
+    ) {
+
+        return ResponseEntity.ok().body(SuccessResponse.of(storeService.getStores(authUser)));
     }
 
     /**
@@ -58,8 +71,7 @@ public class StoreController {
             @Valid @RequestBody StoreRequest.UpdateStores updateStores
     ) {
         storeService.updateStores(authUser, storeId, updateStores);
-        return ResponseEntity.ok()
-                .body(SuccessResponse.of(null));
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 
     /**

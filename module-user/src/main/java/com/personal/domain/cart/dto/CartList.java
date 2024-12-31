@@ -5,7 +5,7 @@ public sealed interface CartList permits
 {
     record Cart(
         Long storeId,
-        Long storeName,
+        String storeName,
         Long productId,
         String productName,
         Long length,

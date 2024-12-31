@@ -40,8 +40,7 @@ public class ProductBom {
 
     }
 
-    public void updateBom(Product baseProduct, Long baseQty, Product materialProduct, Long materialQty) {
-        this.baseProduct = baseProduct;
+    public void updateBom(Long baseQty, Product materialProduct, Long materialQty) {
         this.baseQty = baseQty;
         this.materialProduct = materialProduct;
         this.materialQty = materialQty;

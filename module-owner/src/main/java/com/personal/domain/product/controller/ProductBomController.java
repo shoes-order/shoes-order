@@ -36,6 +36,7 @@ public class ProductBomController {
             @PathVariable Long storeId,
             @PathVariable Long productId
     ) {
+        // TODO : ProductBomRequest.CreateBom 내부의 name 파라미터의 필요성?
         productBomService.createBom(createBom, authUser, storeId, productId);
 
         return ResponseEntity.ok()
@@ -76,8 +77,7 @@ public class ProductBomController {
             @PathVariable Long storeId,
             @PathVariable Long productId
             ) {
-        return ResponseEntity.ok()
-                .body(SuccessResponse.of(productBomService.getBoms(storeId, productId)));
+        return ResponseEntity.ok().body(SuccessResponse.of(productBomService.getBoms(storeId, productId)));
     }
 
     @DeleteMapping("/{storeId}/products/{productId}/bom/{bomId}")

@@ -34,8 +34,7 @@ public class ProductController {
             @ModelAttribute ProductRequest.GetProducts getProducts,
             @PathVariable Long storeId
     ) {
-        return ResponseEntity.ok()
-                .body(SuccessResponse.of(productService.getProducts(getProducts, storeId)));
+        return ResponseEntity.ok().body(SuccessResponse.of(productService.getProducts(getProducts, storeId)));
 
     }
 
@@ -51,8 +50,7 @@ public class ProductController {
             @PathVariable Long storeId,
             @PathVariable Long productId
     ) {
-        return ResponseEntity.ok()
-                .body(SuccessResponse.of(productService.getProduct(storeId, productId)));
+        return ResponseEntity.ok().body(SuccessResponse.of(productService.getProduct(storeId, productId)));
     }
 
 

@@ -17,11 +17,8 @@ public class StoreCommonService {
 
     //id가 없고 삭제처리된 가게 예외처리
     public Store getStores(Long storeId) {
-        Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_STORE));
-        if (!store.isDeleted()) {
-        throw new NotFoundException(ResponseCode.STORE_IS_DELETED);
-        }
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_STORE));
+        if (store.isDeleted()) throw new NotFoundException(ResponseCode.STORE_IS_DELETED);
         return store;
     }
 

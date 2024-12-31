@@ -55,7 +55,7 @@ public class UserService {
     @Transactional
     public void register(UserRequest.Register register) {
         // 중복된 이메일 확인
-        if (Objects.nonNull(userCommonService.getUserByEmail(register.email()))) {
+        if (userRepository.findByEmail(register.email()).isPresent()) {
             throw new BadRequestException(ResponseCode.EMAIL_ALREADY_REGISTERED);
         }
 

@@ -19,11 +19,8 @@ public sealed interface ProductBomRequest permits
     }
 
     record UpdateBom(
-            Long baseProductId,
-            String baseProductName,
             Long baseProductQty,
             Long materialProductId,
-            String materialProductName,
             Long materialProductQty
     )
             implements ProductBomRequest {

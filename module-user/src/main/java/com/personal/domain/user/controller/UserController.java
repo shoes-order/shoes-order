@@ -17,7 +17,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-@Secured({UserRole.Authority.USER})
 @RestController
 public class UserController {
 
@@ -52,6 +51,7 @@ public class UserController {
      * 로그아웃
      * */
     @PostMapping("/logout")
+    @Secured({UserRole.Authority.USER})
     public ResponseEntity<SuccessResponse<Void>> logout(
             @AuthenticationPrincipal AuthUser authUser
     ) {
@@ -64,6 +64,7 @@ public class UserController {
      * 유저 프로필 수정
      * */
     @PatchMapping
+    @Secured({UserRole.Authority.USER})
     public ResponseEntity<SuccessResponse<Void>> updateProfile(
             @AuthenticationPrincipal AuthUser authUser ,
             @Valid @RequestBody UserRequest.UpdateProfile updateProfile
@@ -77,6 +78,7 @@ public class UserController {
      * 유저 프로필 조회
      * */
     @GetMapping
+    @Secured({UserRole.Authority.USER})
     public ResponseEntity<SuccessResponse<UserResponse.getProfile>> getProfile(
             @AuthenticationPrincipal AuthUser authUser
     ) {
