@@ -12,7 +12,6 @@ public sealed interface InputhistoryRequest permits
         {
     record CreateInput(
             Long productId,
-            ProductType type,
             String name,
             Long size,
             Long qty,

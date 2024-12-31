@@ -50,7 +50,7 @@ public class InputHistory extends BaseEntity {
     @Column(nullable = false)
     private LocalDate inputDate;
 
-    @Column(nullable = false)
+    @Column
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

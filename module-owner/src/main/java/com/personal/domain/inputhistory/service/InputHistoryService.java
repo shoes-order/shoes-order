@@ -6,9 +6,11 @@ import com.personal.domain.inputhistory.dto.InputHistoryResponse;
 import com.personal.domain.inputhistory.dto.InputhistoryRequest;
 import com.personal.domain.inputhistory.exception.IllegalLotException;
 import com.personal.domain.inputhistory.repository.InputHistoryRepository;
+import com.personal.domain.product.service.ProductCommonService;
 import com.personal.domain.stock.service.StockService;
 import com.personal.domain.store.service.StoreCommonService;
 import com.personal.entity.history.InputHistory;
+import com.personal.entity.product.Product;
 import com.personal.entity.store.Store;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,10 +26,13 @@ public class InputHistoryService {
     private final InputHistoryRepository inputHistoryRepository;
     private final StoreCommonService storeCommonService;
     private final StockService stockService;
+    private final ProductCommonService productCommonService;
 
     @Transactional
     public void createInput(Long storeId, InputhistoryRequest.CreateInput createInput, AuthUser authUser) {
+
         // TODO : parameter 정리 및 불필요한 필수값은 엔티티에서 수정 할것 (Column 'description' cannot be null 에러 등등)
+        // 해결
         Store store = storeCommonService.getStores(storeId);
         storeCommonService.validateUserAccess(authUser, storeId);
 
@@ -36,9 +41,10 @@ public class InputHistoryService {
         if (inputHistoryRepository.existsByLot(newLot)) {
             throw new IllegalLotException(ResponseCode.ILLEGAL_LOT);
         }
+        Product product = productCommonService.getStoreProduct(storeId, createInput.productId());
         InputHistory inputHistory = InputHistory.builder()
-                .productId(createInput.productId())
-                .type(createInput.type())
+                .productId(product.getId())
+                .type(product.getType())
                 .name(createInput.name())
                 .size(createInput.size())
                 .qty(createInput.qty())

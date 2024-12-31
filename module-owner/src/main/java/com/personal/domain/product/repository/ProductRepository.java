@@ -10,6 +10,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
 
 
     @Query("select p from Product p where p.store.id=:storeId and p.id =:productId")
-    Product getProduct(@Param("storeId") Long storeId, @Param("productId") Long productId);
-
+    Product getStoreProduct(@Param("storeId") Long storeId, @Param("productId") Long productId);
 }

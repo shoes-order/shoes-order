@@ -36,7 +36,7 @@ public class ProductService {
     public ProductResponse.Info getProduct(Long storeId, Long productId) {
         // TODO : Cannot invoke "com.personal.entity.product.Product.isDeleted()" because "product" is null 에러 발생!
         //        해당 에러는 매장과 상품 아이디기반의 검증이 덜되어서 난 에러! 예를 들어 storeId가 1인 매장의 상품을 storeId 2라는 값과 조회하면 나는 에러
-        Product product = productRepository.getProduct(storeId, productId);
+        Product product = productCommonService.getStoreProduct(storeId, productId);
         if (product.isDeleted()) {
             throw new NotFoundProductException(ResponseCode.NOT_FOUND_PRODUCT);
         }
