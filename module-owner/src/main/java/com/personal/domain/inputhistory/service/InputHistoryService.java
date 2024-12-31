@@ -27,6 +27,7 @@ public class InputHistoryService {
 
     @Transactional
     public void createInput(Long storeId, InputhistoryRequest.CreateInput createInput, AuthUser authUser) {
+        // TODO : parameter 정리 및 불필요한 필수값은 엔티티에서 수정 할것 (Column 'description' cannot be null 에러 등등)
         Store store = storeCommonService.getStores(storeId);
         storeCommonService.validateUserAccess(authUser, storeId);
 

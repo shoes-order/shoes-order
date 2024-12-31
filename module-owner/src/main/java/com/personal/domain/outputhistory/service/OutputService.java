@@ -25,6 +25,7 @@ public class OutputService {
 
     @Transactional
     public void createOutPut(Long storeId, AuthUser authUser, OutputRequest.CreateOutPut createOutPut) {
+        // TODO : parameter 정리 및 불필요한 필수값은 엔티티에서 수정 할것 (Column 'description' cannot be null 에러 등등)
         Store store = storeCommonService.getStores(storeId);
         storeCommonService.validateUserAccess(authUser, storeId);
         String newLot = "lot-" + createOutPut.lot();
