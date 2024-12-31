@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/stores")
+@RequestMapping("/api/v1/stores")
 @Secured({UserRole.Authority.OWNER})
 public class StockController {
     private final StockService stockService;
