@@ -23,11 +23,12 @@ public class ProductController {
 
     /**
      * 상품 다건 조회
-     * 해당 가게의 상품들(원자재,완제품)전부 조회
-     * 삭제되지 않은 상품들 조회
+     *      * 해당 가게의 상품들(원자재,완제품)전부 조회
+     *      * 삭제되지 않은 상품들을 조회
      *
      * @param getProducts
-     * @return SuccessResponse
+     * @param storeId
+     * @return
      */
     @GetMapping("/{storeId}/products")
     public ResponseEntity<SuccessResponse<Page<ProductResponse.Infos>>> getProducts(
