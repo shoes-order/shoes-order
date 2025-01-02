@@ -1,8 +1,8 @@
-package com.personal.domain.product.service;
+package com.personal.domain.bom.service;
 
 import com.personal.common.code.ResponseCode;
 import com.personal.domain.product.exception.NotFoundProductException;
-import com.personal.domain.product.repository.ProductBomRepository;
+import com.personal.domain.bom.repository.ProductBomRepository;
 import com.personal.entity.product.ProductBom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

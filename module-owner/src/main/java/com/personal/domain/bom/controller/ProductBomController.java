@@ -1,11 +1,11 @@
-package com.personal.domain.product.controller;
+package com.personal.domain.bom.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
 import com.personal.common.enums.UserRole;
-import com.personal.domain.product.dto.ProductBomRequest;
-import com.personal.domain.product.dto.ProductBomResponse;
-import com.personal.domain.product.service.ProductBomService;
+import com.personal.domain.bom.dto.ProductBomRequest;
+import com.personal.domain.bom.dto.ProductBomResponse;
+import com.personal.domain.bom.service.ProductBomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -36,7 +36,6 @@ public class ProductBomController {
             @PathVariable Long storeId,
             @PathVariable Long productId
     ) {
-        // TODO : ProductBomRequest.CreateBom 내부의 name 파라미터의 필요성?
         productBomService.createBom(createBom, authUser, storeId, productId);
 
         return ResponseEntity.ok()
@@ -48,7 +47,6 @@ public class ProductBomController {
      *
      * @param updateBom
      * @param storeId
-     * @param productId
      * @param bomId
      * @param authUser
      * @return
@@ -57,17 +55,18 @@ public class ProductBomController {
     public ResponseEntity<SuccessResponse<Void>> updateBom(
             @RequestBody ProductBomRequest.UpdateBom updateBom,
             @PathVariable Long storeId,
-            @PathVariable Long productId,
             @PathVariable Long bomId,
+            @PathVariable Long productId,
             @AuthenticationPrincipal AuthUser authUser
     ) {
-        productBomService.updateBom(updateBom, storeId, productId, bomId, authUser);
+        productBomService.updateBom(updateBom, storeId, bomId, productId, authUser);
         return ResponseEntity.ok()
                 .body(SuccessResponse.of(null));
     }
 
     /**
      * bom 조회
+     *
      * @param storeId
      * @param productId
      * @return
@@ -75,9 +74,10 @@ public class ProductBomController {
     @GetMapping("/{storeId}/products/{productId}/bom")
     public ResponseEntity<SuccessResponse<List<ProductBomResponse.GetInfos>>> getBoms(
             @PathVariable Long storeId,
-            @PathVariable Long productId
-            ) {
-        return ResponseEntity.ok().body(SuccessResponse.of(productBomService.getBoms(storeId, productId)));
+            @PathVariable Long productId,
+            @AuthenticationPrincipal AuthUser authUser
+    ) {
+        return ResponseEntity.ok().body(SuccessResponse.of(productBomService.getBoms(storeId, productId, authUser)));
     }
 
     @DeleteMapping("/{storeId}/products/{productId}/bom/{bomId}")
@@ -86,8 +86,8 @@ public class ProductBomController {
             @PathVariable Long productId,
             @PathVariable Long bomId,
             @AuthenticationPrincipal AuthUser authUser
-    ){
-        productBomService.deleteBom(storeId,productId,bomId ,authUser);
+    ) {
+        productBomService.deleteBom(storeId, productId, bomId, authUser);
         return ResponseEntity.ok()
                 .body(SuccessResponse.of(null));
     }

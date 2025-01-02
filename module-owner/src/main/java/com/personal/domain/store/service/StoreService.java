@@ -49,6 +49,22 @@ public class StoreService {
                 .toList();
     }
 
+    public StoreResponse.GetStores getStore(AuthUser authUser, Long storeId) {
+        Long userId = authUser.getUserId();
+        Store store = storeCommonService.getStores(storeId);
+        if (!userId.equals(store.getUser().getId())) {
+            throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_STORES_USER);
+        }
+
+        return new StoreResponse.GetStores(
+                store.getName(),
+                store.getTel(),
+                store.getZip(),
+                store.getAddress(),
+                store.getAddressDetail()
+        );
+    }
+
     @Transactional
     public void updateStores(AuthUser authUser, Long storeId, StoreRequest.UpdateStores updateStores) {
         Store store = storeCommonService.getStores(storeId);
@@ -73,4 +89,6 @@ public class StoreService {
 
         store.updateIsDeleted(true);
     }
+
+
 }

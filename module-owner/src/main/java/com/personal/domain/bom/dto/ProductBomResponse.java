@@ -1,4 +1,4 @@
-package com.personal.domain.product.dto;
+package com.personal.domain.bom.dto;
 
 public sealed interface ProductBomResponse permits
         ProductBomResponse.GetInfos {

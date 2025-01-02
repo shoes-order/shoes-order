@@ -28,6 +28,4 @@ public class StoreCommonService {
             throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_STORES_USER);
         }
     }
-
-
 }

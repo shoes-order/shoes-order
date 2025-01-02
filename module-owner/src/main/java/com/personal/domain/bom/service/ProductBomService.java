@@ -1,10 +1,12 @@
-package com.personal.domain.product.service;
+package com.personal.domain.bom.service;
 
 import com.personal.common.code.ResponseCode;
 import com.personal.common.entity.AuthUser;
-import com.personal.domain.product.dto.ProductBomRequest;
-import com.personal.domain.product.dto.ProductBomResponse;
-import com.personal.domain.product.repository.ProductBomRepository;
+import com.personal.common.exception.custom.NotFoundException;
+import com.personal.domain.bom.dto.ProductBomRequest;
+import com.personal.domain.bom.dto.ProductBomResponse;
+import com.personal.domain.bom.repository.ProductBomRepository;
+import com.personal.domain.product.service.ProductCommonService;
 import com.personal.domain.stock.service.StockService;
 import com.personal.domain.store.exception.StoreOwnerMismatchException;
 import com.personal.domain.store.service.StoreCommonService;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,13 +36,12 @@ public class ProductBomService {
         if (!authUser.getUserId().equals(store.getUser().getId())) {
             throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_ADD);
         }
-        productCommonService.getProducts(productId);
 
-        //완제품 객체
-        Product baseProduct = productCommonService.getProducts(createBom.baseProductId());
+        // 해당가게에서 기본 제품 가져오기
+        Product baseProduct = productCommonService.getStoreProduct(storeId, createBom.baseProductId());
+        // 해당가게에서 하위 제품 가져오기
+        Product materialProduct = productCommonService.getStoreProduct(storeId, createBom.materialProductId());
 
-        //원자재
-        Product materialProduct = productCommonService.getProducts(createBom.materialProductId());
         ProductBom productBom = ProductBom.builder()
                 .baseProduct(baseProduct)
                 .baseQty(createBom.baseProductQty())
@@ -54,39 +54,43 @@ public class ProductBomService {
 
 
     @Transactional
-    public void updateBom(ProductBomRequest.UpdateBom updateBom, Long storeId, Long productId, Long bomId, AuthUser authUser) {
-        // TODO : userId , storeId , productId 를 한번에 검증할수 있는 쿼리 구현
+    public void updateBom(ProductBomRequest.UpdateBom updateBom, Long storeId, Long bomId, Long productId, AuthUser authUser) {
 
+        Long userId = authUser.getUserId();
 
-        //원자재
-        Product materialProduct = productCommonService.getProducts(updateBom.materialProductId());
+        // 해당가게에서 기본 제품 가져오기
+        Product baseProduct = productCommonService.getStoreProduct(storeId, updateBom.baseProductId());
+        // 해당가게에서 하위 제품 가져오기
+        Product materialProduct = productCommonService.getStoreProduct(storeId, updateBom.materialProductId());
 
         ProductBom productBom = productBomCommonService.getBoms(bomId);
-        productBom.updateBom(
+        productBom.updateProductBom(
+                baseProduct,
                 updateBom.baseProductQty(),
                 materialProduct,
                 updateBom.materialProductQty()
         );
     }
 
-    public List<ProductBomResponse.GetInfos> getBoms(Long storeId, Long productId) {
+    public List<ProductBomResponse.GetInfos> getBoms(Long storeId, Long productId, AuthUser authUser) {
         // TODO : userId , storeId , productId 를 한번에 검증할수 있는 쿼리 구현
         //        왜냐 다른 매장의 상품까지도 조회할수 있게 되어버림
+        Long userId = authUser.getUserId();
+        List<ProductBom> results = productBomRepository.searchStoreProductAndUser(storeId, productId, userId);
 
-        storeCommonService.getStores(storeId);
-        productCommonService.getProducts(productId);
+        if (results.isEmpty()) {
+            throw new NotFoundException(ResponseCode.NOT_FOUND_PRODUCT);
+        }
 
-        List<ProductBom> productBomList = productBomRepository.findAllByIdAndMaterial(productId);
-        return productBomList.stream()
-                .map(productBom -> new ProductBomResponse.GetInfos(
-                        productBom.getBaseProduct().getId(),
-                        productBom.getBaseProduct().getName(),
-                        productBom.getBaseQty(),
-                        productBom.getMaterialProduct().getId(),
-                        productBom.getMaterialProduct().getName(),
-                        productBom.getMaterialQty()
-                ))
-                .collect(Collectors.toList());
+        return results.stream().map(productBom -> new ProductBomResponse.GetInfos(
+                productBom.getBaseProduct().getId(),
+                productBom.getBaseProduct().getName(),
+                productBom.getBaseQty(),
+                productBom.getMaterialProduct().getId(),
+                productBom.getMaterialProduct().getName(),
+                productBom.getMaterialQty()
+
+        )).toList();
     }
 
     @Transactional

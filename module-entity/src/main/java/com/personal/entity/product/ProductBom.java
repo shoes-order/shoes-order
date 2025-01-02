@@ -40,10 +40,12 @@ public class ProductBom {
 
     }
 
-    public void updateBom(Long baseQty, Product materialProduct, Long materialQty) {
+    public void updateProductBom(Product baseProduct, Long baseQty, Product materialProduct, Long materialQty) {
+        this.baseProduct = baseProduct;
         this.baseQty = baseQty;
         this.materialProduct = materialProduct;
         this.materialQty = materialQty;
+
     }
 
     public void updateIsdeleted() {

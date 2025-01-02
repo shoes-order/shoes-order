@@ -1,4 +1,4 @@
-package com.personal.domain.product.dto;
+package com.personal.domain.bom.dto;
 
 import java.util.Objects;
 
@@ -8,10 +8,8 @@ public sealed interface ProductBomRequest permits
         ProductBomRequest.GetProductBoms {
     record CreateBom(
             Long baseProductId,
-            String baseProductName,
             Long baseProductQty,
             Long materialProductId,
-            String materialProductName,
             Long materialProductQty
 
     )
@@ -19,6 +17,7 @@ public sealed interface ProductBomRequest permits
     }
 
     record UpdateBom(
+            Long baseProductId,
             Long baseProductQty,
             Long materialProductId,
             Long materialProductQty
