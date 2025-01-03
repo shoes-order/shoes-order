@@ -6,8 +6,8 @@ import com.querydsl.jpa.JPQLQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.personal.entity.product.QProduct.product;
 import static com.personal.entity.product.QProductBom.productBom;
 import static com.personal.entity.store.QStore.store;
 import static com.personal.entity.user.QUser.user;
@@ -23,17 +23,37 @@ public class ProductBomDslRepositoryImpl implements ProductBomDslRepository {
     @Override
     public List<ProductBom> searchStoreProductAndUser(Long storeId, Long productId, Long userId) {
         return queryFactory
-                .selectFrom(productBom)
-                .join(productBom.baseProduct, baseProduct)
+                .select(productBom)
+                .distinct()
+                .from(productBom)
+                .join(productBom.baseProduct, baseProduct).fetchJoin()
                 .join(productBom.materialProduct, materialProduct)
-                .join(productBom.baseProduct.store, store).innerJoin(store.user, user) // innerJoin 사용
-                .fetchJoin()
+                .join(productBom.baseProduct.store, store).fetchJoin()
+                .innerJoin(store.user, user).fetchJoin()
                 .where(
-                        product.id.eq(productId),
+                        baseProduct.id.eq(productId),
                         store.id.eq(storeId),
                         user.id.eq(userId)
                 )
                 .fetch();
+    }
+
+    @Override
+    public Optional<ProductBom> validateStoreProductAndUser(Long storeId, Long productId, Long userId) {
+        return Optional.ofNullable((queryFactory
+                .select(productBom)
+                .distinct()
+                .from(productBom)
+                .join(productBom.baseProduct, baseProduct).fetchJoin()
+                .join(productBom.materialProduct, materialProduct)
+                .join(productBom.baseProduct.store, store).fetchJoin()
+                .innerJoin(store.user, user).fetchJoin()
+                .where(
+                        baseProduct.id.eq(productId),
+                        store.id.eq(storeId),
+                        user.id.eq(userId)
+                )
+                .fetchOne()));
     }
 
 

@@ -32,10 +32,9 @@ public class ProductBomService {
 
     @Transactional
     public void createBom(ProductBomRequest.CreateBom createBom, AuthUser authUser, Long storeId, Long productId) {
-        Store store = storeCommonService.getStores(storeId);
-        if (!authUser.getUserId().equals(store.getUser().getId())) {
-            throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_ADD);
-        }
+        storeCommonService.getStores(storeId);
+        storeCommonService.validateUserAccess(authUser, storeId);
+
 
         // 해당가게에서 기본 제품 가져오기
         Product baseProduct = productCommonService.getStoreProduct(storeId, createBom.baseProductId());
@@ -55,8 +54,9 @@ public class ProductBomService {
 
     @Transactional
     public void updateBom(ProductBomRequest.UpdateBom updateBom, Long storeId, Long bomId, Long productId, AuthUser authUser) {
+        storeCommonService.getStores(storeId);
+        storeCommonService.validateUserAccess(authUser, storeId);
 
-        Long userId = authUser.getUserId();
 
         // 해당가게에서 기본 제품 가져오기
         Product baseProduct = productCommonService.getStoreProduct(storeId, updateBom.baseProductId());
@@ -73,14 +73,15 @@ public class ProductBomService {
     }
 
     public List<ProductBomResponse.GetInfos> getBoms(Long storeId, Long productId, AuthUser authUser) {
-        // TODO : userId , storeId , productId 를 한번에 검증할수 있는 쿼리 구현
-        //        왜냐 다른 매장의 상품까지도 조회할수 있게 되어버림
+        storeCommonService.getStores(storeId);
+        storeCommonService.validateUserAccess(authUser, storeId);
+
         Long userId = authUser.getUserId();
         List<ProductBom> results = productBomRepository.searchStoreProductAndUser(storeId, productId, userId);
-
         if (results.isEmpty()) {
-            throw new NotFoundException(ResponseCode.NOT_FOUND_PRODUCT);
+            throw new NotFoundException(ResponseCode.NOT_FOUND_STORE_PRODUCT);
         }
+
 
         return results.stream().map(productBom -> new ProductBomResponse.GetInfos(
                 productBom.getBaseProduct().getId(),

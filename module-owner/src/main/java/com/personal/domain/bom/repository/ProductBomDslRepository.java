@@ -3,8 +3,12 @@ package com.personal.domain.bom.repository;
 import com.personal.entity.product.ProductBom;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductBomDslRepository {
 
     List<ProductBom> searchStoreProductAndUser(Long storeId, Long productId, Long userId);
+
+
+    Optional<ProductBom> validateStoreProductAndUser(Long storeId, Long productId, Long userId);
 }

@@ -23,6 +23,6 @@ public class ProductCommonService {
     // 해당가게의 상품 가져오기
     public Product getStoreProduct(Long storeId, Long productId) {
         return productRepository.getStoreProduct(storeId, productId)
-                .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_PRODUCT));
+                .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_STORE_PRODUCT));
     }
 }

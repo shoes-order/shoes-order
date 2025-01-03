@@ -49,8 +49,7 @@ public enum ResponseCode {
 
     //404
     NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
-    NOT_FOUND_BASE("해당 완제품을 찾을 수 없습니다."),
-    NOT_FOUND_MATERIAL("해당 원자재를 찾을 수 없습니다."),
+    NOT_FOUND_STORE_PRODUCT("해당 가게의 상품을 찾을 수 없습니다."),
     NOT_FOUND_PRODUCTBOM("상품 BOM을 찾을 수 없습니다."),
     NOT_FOUND_STOCK("재고를 찾을 수 없습니다."),
     NOT_FOUND_ORDER("주문을 찾을 수 없습니다."),
