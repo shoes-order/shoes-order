@@ -42,8 +42,7 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable) // LogoutFilter 비활성화
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/test").permitAll()
-                        .requestMatchers("/api/*/users/login", "/api/*/users/register",
-                                "api/*owners/login", "api/*owners/register").permitAll()
+                        .requestMatchers("/api/*/users/login", "/api/*/users/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource))

@@ -2,12 +2,14 @@ package com.personal.domain.user.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.user.dto.UserRequest;
 import com.personal.domain.user.dto.UserResponse;
 import com.personal.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +51,7 @@ public class UserController {
      * 로그아웃
      * */
     @PostMapping("/logout")
+    @Secured({UserRole.Authority.USER})
     public ResponseEntity<SuccessResponse<Void>> logout(
             @AuthenticationPrincipal AuthUser authUser
     ) {
@@ -61,6 +64,7 @@ public class UserController {
      * 유저 프로필 수정
      * */
     @PatchMapping
+    @Secured({UserRole.Authority.USER})
     public ResponseEntity<SuccessResponse<Void>> updateProfile(
             @AuthenticationPrincipal AuthUser authUser ,
             @Valid @RequestBody UserRequest.UpdateProfile updateProfile
@@ -74,6 +78,7 @@ public class UserController {
      * 유저 프로필 조회
      * */
     @GetMapping
+    @Secured({UserRole.Authority.USER})
     public ResponseEntity<SuccessResponse<UserResponse.getProfile>> getProfile(
             @AuthenticationPrincipal AuthUser authUser
     ) {

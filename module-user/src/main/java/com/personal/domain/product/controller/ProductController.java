@@ -1,12 +1,14 @@
 package com.personal.domain.product.controller;
 
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.product.dto.ProductRequest;
 import com.personal.domain.product.dto.ProductResponse;
 import com.personal.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/stores/{storeId}/products")
+@Secured({UserRole.Authority.USER})
 @RestController
 public class ProductController {
     private final ProductService productService;

@@ -122,6 +122,9 @@ public class OrdersService {
             list.add(ordersDetail);
         }
         orderDetailService.saveAll(list);
+
+        // 장바구니 비우기
+        cartCommonService.emptyCart(authUser.getUserId());
     }
 
     public Page<OrderResponse.Infos> getOrders(AuthUser authUser , OrderRequest.GetOrder getOrder) {

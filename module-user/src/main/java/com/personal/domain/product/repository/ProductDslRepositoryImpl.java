@@ -44,11 +44,15 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
     }
 
     private BooleanExpression searchProducts(String type , String value) {
-        return switch (type) {
-            case "name" -> value != null ? product.name.contains(value) : null;
-            case "category" -> value != null ? product.category.contains(value) : null;
-            default -> null;
-        };
+        if (Objects.nonNull(type)) {
+            return switch (type) {
+                case "name" -> value != null ? product.name.contains(value) : null;
+                case "category" -> value != null ? product.category.contains(value) : null;
+                default -> null;
+            };
+        } else {
+            return null;
+        }
     }
 
     private BooleanExpression searchPrice(Long minPrice , Long maxPrice) {

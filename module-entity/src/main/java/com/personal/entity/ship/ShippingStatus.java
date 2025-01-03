@@ -39,4 +39,8 @@ public class ShippingStatus extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Orders orders;
+
+    public void updateStatus(ShipStatus shipStatus) {
+        this.shippingStatus = shipStatus;
+    }
 }

@@ -3,6 +3,7 @@ package com.personal.entity.history;
 import com.personal.entity.product.ProductType;
 import com.personal.entity.store.Store;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,13 +42,28 @@ public class OutputHistory {
     @Column(nullable = false)
     private Long price;
 
-    @Column(nullable = false , unique = true)
+    @Column(nullable = false, unique = true)
     private String lot;
 
     @Column(nullable = false)
     private LocalDate outputDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id" , nullable = false)
+    @JoinColumn(name = "store_id", nullable = false)
     private Store store;
+
+    @Builder
+    public OutputHistory(Long productId, ProductType type, String name, Long size, Long qty, Long price, String lot, LocalDate outputDate, Store store) {
+        this.productId = productId;
+        this.type = type;
+        this.name = name;
+        this.size = size;
+        this.qty = qty;
+        this.price = price;
+        this.lot = lot;
+        this.outputDate = outputDate;
+        this.store = store;
+
+    }
 }
+

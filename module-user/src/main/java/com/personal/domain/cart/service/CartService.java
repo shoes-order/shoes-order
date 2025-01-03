@@ -2,6 +2,7 @@ package com.personal.domain.cart.service;
 
 import com.personal.common.code.ResponseCode;
 import com.personal.common.entity.AuthUser;
+import com.personal.common.exception.custom.BadRequestException;
 import com.personal.common.exception.custom.NotFoundException;
 import com.personal.domain.cart.dto.CartList;
 import com.personal.domain.cart.dto.CartRequest;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,6 +52,10 @@ public class CartService {
         Store store = storeCommonService.getStoreById(storeId);
         Product product = productCommonService.getProductByIdAndStoreIdAndTypeProduct(addCart.productId() , storeId);
 
+        if (Objects.isNull(product)) {
+            throw new NotFoundException(ResponseCode.NOT_FOUND_PRODUCT);
+        }
+
         Cart cart = Cart.builder()
                 .length(addCart.length())
                 .width(addCart.width())
@@ -78,6 +84,6 @@ public class CartService {
 
     @Transactional
     public void emptyCart(AuthUser authUser) {
-        cartRepository.deleteByUserId(authUser.getUserId());
+        cartCommonService.emptyCart(authUser.getUserId());
     }
 }

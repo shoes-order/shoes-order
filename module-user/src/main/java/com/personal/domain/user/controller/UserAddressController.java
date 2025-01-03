@@ -2,12 +2,14 @@ package com.personal.domain.user.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.user.dto.UserAddressRequest;
 import com.personal.domain.user.dto.UserAddressResponse;
 import com.personal.domain.user.service.UserAddressService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users/address")
+@Secured({UserRole.Authority.USER})
 @RestController
 public class UserAddressController {
 

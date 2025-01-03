@@ -96,4 +96,8 @@ public class Orders extends BaseEntity {
         this.user = user;
         this.store = store;
     }
+
+    public void updateStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

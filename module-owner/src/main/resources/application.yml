@@ -22,7 +22,7 @@ spring:
         show_sql: true
         use_sql_comments: true
 server:
-  port: 8080
+  port: 8081
 
 jwt:
   secret:
@@ -30,3 +30,16 @@ jwt:
       key: ${JWT_SECRET_ACCESS_TOKEN}
     refresh:
       key: ${JWT_SECRET_REFRESH_TOKEN}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    credentials:
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
+    region:
+      static: ${AWS_REGION_STATIC}
+      auto: false
+    stack:
+      auto: false

@@ -3,9 +3,9 @@ package com.personal.domain.owner.dto;
 import jakarta.validation.constraints.NotBlank;
 
 public sealed interface OwnerRequest permits
-        OwnerRequest.Login ,
-        OwnerRequest.Register
-{
+        OwnerRequest.Login,
+        OwnerRequest.Register,
+        OwnerRequest.UpdateProfile {
     record Login(
             @NotBlank
             String email,
@@ -17,6 +17,14 @@ public sealed interface OwnerRequest permits
     record Register(
             @NotBlank
             String email,
+            @NotBlank
+            String password,
+            @NotBlank
+            String name
+    ) implements OwnerRequest {
+    }
+
+    record UpdateProfile(
             @NotBlank
             String password,
             @NotBlank

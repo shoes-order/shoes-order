@@ -2,6 +2,7 @@ package com.personal.domain.order.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.order.dto.OrderRequest;
 import com.personal.domain.order.dto.OrderResponse;
 import com.personal.domain.order.service.OrdersService;
@@ -9,12 +10,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/orders")
+@Secured({UserRole.Authority.USER})
 @RestController
 public class OrdersController {
 

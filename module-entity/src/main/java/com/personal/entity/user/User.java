@@ -2,10 +2,15 @@ package com.personal.entity.user;
 
 import com.personal.common.entity.BaseEntity;
 import com.personal.common.enums.UserRole;
+import com.personal.entity.order.Orders;
+import com.personal.entity.store.Store;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -30,6 +35,12 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private List<Store> stores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private List<Orders> orders = new ArrayList<>();
 
     @Builder
     public User(String email, String password, String name, UserRole role) {

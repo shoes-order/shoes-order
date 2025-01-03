@@ -30,8 +30,35 @@ public enum ResponseCode {
 
     NOT_FOUND_REVIEW("리뷰 정보를 찾을 수 없습니다."),
     INVALID_REVIEW_ACCESS("잘못된 리뷰 접근입니다."),
-    ALREADY_REGISTERED_REVIEW("이미 등록된 리뷰가 있습니다.")
-    ;
+    ALREADY_REGISTERED_REVIEW("이미 등록된 리뷰가 있습니다."),
+
+    //Owner Module Error
+
+    //403
+    FORBIDDEN_PRODUCTS_ADD("해당 상품 등록이 허용되지 않습니다."),
+    FORBIDDEN_PRODUCTS_OUTPUT("원자재 상품은 출고할 수 없습니다."),
+    FORBIDDEN_PRODUCTS_UPDATE("해당 상품 수정이 허용되지 않습니다."),
+    FORBIDDEN_PRODUCTS_DELETE("해당 상품 삭제가 허용되지 않습니다."),
+    FORBIDDEN_STORES_UPDATE("해당 가게 수정이 허용되지 않습니다."),
+    FORBIDDEN_STORES_USER("해당 가게 오너가 아닙니다."),
+    FORBIDDEN_STORES_DELETE("해당 가게 삭제가 허용되지 않습니다."),
+
+    //400
+    INVALID_STOCK_QUNTITY("추가,감소할 수량은 0보다 커야 합니다."),
+    INVALID_STOCK("재고가 부족하여 차감할 수 없습니다."),
+
+    //404
+    NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
+    NOT_FOUND_STORE_PRODUCT("해당 가게의 상품을 찾을 수 없습니다."),
+    NOT_FOUND_PRODUCTBOM("상품 BOM을 찾을 수 없습니다."),
+    NOT_FOUND_STOCK("재고를 찾을 수 없습니다."),
+    NOT_FOUND_ORDER("주문을 찾을 수 없습니다."),
+    STORE_IS_DELETED("해당 매점은 삭제되었습니다."),
+    NOT_FOUND_SHIPPING("배송현황이 없습니다."),
+
+    //500
+    ILLEGAL_LOT("lot가 중복됩니다.");
+
 
     private final String message;
 }

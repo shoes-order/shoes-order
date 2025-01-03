@@ -1,7 +1,9 @@
 package com.personal.entity.product;
 
+import com.personal.common.entity.BaseEntity;
 import com.personal.entity.store.Store;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "product")
-public class Product {
+public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,12 +38,46 @@ public class Product {
     private Long customPrice;
 
     @Column(nullable = false)
-    private boolean isSold;
+    private boolean isSold = true;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
+
+    @Column(nullable = false)
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id" , nullable = false)
+    @JoinColumn(name = "store_id", nullable = false)
     private Store store;
+
+    @Builder
+    public Product(Store store, ProductType type, String name, String category, String material, Long spacing, Long basePrice, Long customPrice, String description) {
+        this.store = store;
+        this.type = type;
+        this.name = name;
+        this.category = category;
+        this.material = material;
+        this.spacing = spacing;
+        this.basePrice = basePrice;
+        this.customPrice = customPrice;
+        this.description = description;
+
+    }
+
+    public void updateProducts(ProductType type, String name, String category, String material, Long spacing, Long basePrice, Long customPrice, String description) {
+        this.type = type;
+        this.name = name;
+        this.category = category;
+        this.material = material;
+        this.spacing = spacing;
+        this.basePrice = basePrice;
+        this.customPrice = customPrice;
+        this.description = description;
+
+    }
+
+
+    public void updateIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }
