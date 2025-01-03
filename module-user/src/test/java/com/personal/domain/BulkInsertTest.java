@@ -75,7 +75,7 @@ public class BulkInsertTest {
     public void test2() {
         List<Product> products = new ArrayList<>();
 
-        for (long i = 1001L; i <= 10000L; i++) {
+        for (long i = 10001L; i <= 20000L; i++) {
             Store store = storeRepository.findById(i).orElse(new Store());
             for (long j = 0L; j < 2L; j++) {
                 Product product = Product.builder()

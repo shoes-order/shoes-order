@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.personal.entity.product.QProduct.product;
 import static com.personal.entity.store.QStore.store;
@@ -72,10 +73,14 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
     }
 
     private BooleanExpression searchStores(String type , String value) {
-        return switch (type) {
-            case "name" -> value != null ? store.name.contains(value) : null;
-            case "address" -> value != null ? store.address.contains(value) : null;
-            default -> null;
-        };
+        if (Objects.nonNull(type)) {
+            return switch (type) {
+                case "name" -> value != null ? store.name.contains(value) : null;
+                case "address" -> value != null ? store.address.contains(value) : null;
+                default -> null;
+            };
+        } else {
+            return null;
+        }
     }
 }
