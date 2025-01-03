@@ -10,5 +10,6 @@ public interface ProductBomDslRepository {
     List<ProductBom> searchStoreProductAndUser(Long storeId, Long productId, Long userId);
 
 
-    Optional<ProductBom> validateStoreProductAndUser(Long storeId, Long productId, Long userId);
+
+    Optional<ProductBom> validateAndFindBom(Long storeId, Long productId, Long bomId, Long userId);
 }

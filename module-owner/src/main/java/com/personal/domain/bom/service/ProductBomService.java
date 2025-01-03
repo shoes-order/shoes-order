@@ -8,11 +8,9 @@ import com.personal.domain.bom.dto.ProductBomResponse;
 import com.personal.domain.bom.repository.ProductBomRepository;
 import com.personal.domain.product.service.ProductCommonService;
 import com.personal.domain.stock.service.StockService;
-import com.personal.domain.store.exception.StoreOwnerMismatchException;
 import com.personal.domain.store.service.StoreCommonService;
 import com.personal.entity.product.Product;
 import com.personal.entity.product.ProductBom;
-import com.personal.entity.store.Store;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,10 +52,9 @@ public class ProductBomService {
 
     @Transactional
     public void updateBom(ProductBomRequest.UpdateBom updateBom, Long storeId, Long bomId, Long productId, AuthUser authUser) {
-        storeCommonService.getStores(storeId);
-        storeCommonService.validateUserAccess(authUser, storeId);
-
-
+        Long userId = authUser.getUserId();
+        productBomRepository.validateAndFindBom(storeId, productId, bomId, userId)
+                .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_PRODUCTBOM));
         // 해당가게에서 기본 제품 가져오기
         Product baseProduct = productCommonService.getStoreProduct(storeId, updateBom.baseProductId());
         // 해당가게에서 하위 제품 가져오기
@@ -97,23 +94,12 @@ public class ProductBomService {
     @Transactional
     public void deleteBom(Long storeId, Long productId, Long bomId, AuthUser authUser) {
         // TODO : userId , storeId , productId , bomId 를 한번에 검증할수 있는 쿼리 구현
-        /**
-         * select *
-         * from bom b
-         *  inner join product p on (p.id = b.baseProductId and p.id = :productId)
-         *  inner join store s on (s.id = p.storeId and s.id = :storeId)
-         *  inner join user u on (u.id = s.userId and u.id = :userId)
-         * where b.bomId = :bomId
-         * */
+        Long userId = authUser.getUserId();
 
-        Store store = storeCommonService.getStores(storeId);
-        if (!authUser.getUserId().equals(store.getUser().getId())) {
-            throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_DELETE);
-        }
-        productCommonService.getProducts(productId);
-
+        ProductBom bom = productBomRepository.validateAndFindBom(storeId, productId, bomId, userId)
+                .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_PRODUCTBOM));
 
         // TODO : deleteById가 아닌 bomId로 pruductBom 객체를 조회해서 영속성 컨텍스트 생명주기로 영속시킨 다음에 삭제할 것
-        productBomRepository.deleteById(bomId);
+        productBomRepository.delete(bom);
     }
 }

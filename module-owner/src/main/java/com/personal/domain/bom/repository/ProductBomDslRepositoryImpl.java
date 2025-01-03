@@ -23,13 +23,11 @@ public class ProductBomDslRepositoryImpl implements ProductBomDslRepository {
     @Override
     public List<ProductBom> searchStoreProductAndUser(Long storeId, Long productId, Long userId) {
         return queryFactory
-                .select(productBom)
-                .distinct()
-                .from(productBom)
+                .selectFrom(productBom)
                 .join(productBom.baseProduct, baseProduct).fetchJoin()
-                .join(productBom.materialProduct, materialProduct)
+                .join(productBom.materialProduct, materialProduct).fetchJoin()
                 .join(productBom.baseProduct.store, store).fetchJoin()
-                .innerJoin(store.user, user).fetchJoin()
+                .join(store.user, user).fetchJoin()
                 .where(
                         baseProduct.id.eq(productId),
                         store.id.eq(storeId),
@@ -39,21 +37,20 @@ public class ProductBomDslRepositoryImpl implements ProductBomDslRepository {
     }
 
     @Override
-    public Optional<ProductBom> validateStoreProductAndUser(Long storeId, Long productId, Long userId) {
-        return Optional.ofNullable((queryFactory
-                .select(productBom)
-                .distinct()
-                .from(productBom)
+    public Optional<ProductBom> validateAndFindBom(Long storeId, Long productId, Long bomId, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(productBom)
                 .join(productBom.baseProduct, baseProduct).fetchJoin()
-                .join(productBom.materialProduct, materialProduct)
-                .join(productBom.baseProduct.store, store).fetchJoin()
-                .innerJoin(store.user, user).fetchJoin()
+                .join(productBom.materialProduct, materialProduct).fetchJoin()
+                .join(baseProduct.store, store).fetchJoin()
+                .join(store.user, user).fetchJoin()
                 .where(
                         baseProduct.id.eq(productId),
                         store.id.eq(storeId),
-                        user.id.eq(userId)
+                        user.id.eq(userId),
+                        productBom.id.eq(bomId)
                 )
-                .fetchOne()));
+                .fetchOne());
     }
 
 
