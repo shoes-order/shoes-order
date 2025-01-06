@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -34,7 +36,7 @@ public class InputHistoryService {
         Store store = storeCommonService.getStores(storeId);
         storeCommonService.validateUserAccess(authUser, storeId);
 
-        String newLot = "lot-" + createInput.lot();
+        String newLot = "lot-" + UUID.randomUUID();
         //lot가 유니크한 값인지 검증
         if (inputHistoryRepository.existsByLot(newLot)) {
             throw new IllegalLotException(ResponseCode.ILLEGAL_LOT);

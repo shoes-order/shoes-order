@@ -33,9 +33,10 @@ public class ProductController {
     @GetMapping("/{storeId}/products")
     public ResponseEntity<SuccessResponse<Page<ProductResponse.Infos>>> getProducts(
             @ModelAttribute ProductRequest.GetProducts getProducts,
-            @PathVariable Long storeId
+            @PathVariable Long storeId,
+            @AuthenticationPrincipal AuthUser authUser
     ) {
-        return ResponseEntity.ok().body(SuccessResponse.of(productService.getProducts(getProducts, storeId)));
+        return ResponseEntity.ok().body(SuccessResponse.of(productService.getProducts(getProducts, storeId,authUser)));
 
     }
 

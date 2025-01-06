@@ -28,7 +28,6 @@ public class StockService {
     public Page<StockResponse.Infos> getStocks(Long storeId, StockRequest.GetStocks getStocks, AuthUser authUser) {
         Pageable pageable = PageRequest.of(getStocks.page() - 1, getStocks.size());
 
-        Store store = storeCommonService.getStores(storeId);
         storeCommonService.validateUserAccess(authUser, storeId);
 
         return stockRepository.getStocks(pageable, storeId, getStocks);

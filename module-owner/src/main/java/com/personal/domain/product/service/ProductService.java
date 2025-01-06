@@ -27,7 +27,9 @@ public class ProductService {
     private final StoreCommonService storeCommonService;
     private final ProductCommonService productCommonService;
 
-    public Page<ProductResponse.Infos> getProducts(ProductRequest.GetProducts getProducts, Long storeId) {
+    public Page<ProductResponse.Infos> getProducts(ProductRequest.GetProducts getProducts, Long storeId, AuthUser authUser) {
+        storeCommonService.getStores(storeId);
+        storeCommonService.validateUserAccess(authUser, storeId);
         Pageable pageable = PageRequest.of(getProducts.page() - 1, getProducts.size());
         return productRepository.getProducts(getProducts, pageable, storeId);
     }

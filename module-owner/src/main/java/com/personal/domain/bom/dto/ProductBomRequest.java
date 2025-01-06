@@ -7,7 +7,6 @@ public sealed interface ProductBomRequest permits
         ProductBomRequest.UpdateBom,
         ProductBomRequest.GetProductBoms {
     record CreateBom(
-            Long baseProductId,
             Long baseProductQty,
             Long materialProductId,
             Long materialProductQty
@@ -17,7 +16,6 @@ public sealed interface ProductBomRequest permits
     }
 
     record UpdateBom(
-            Long baseProductId,
             Long baseProductQty,
             Long materialProductId,
             Long materialProductQty

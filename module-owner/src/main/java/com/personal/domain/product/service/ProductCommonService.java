@@ -25,4 +25,16 @@ public class ProductCommonService {
         return productRepository.getStoreProduct(storeId, productId)
                 .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_STORE_PRODUCT));
     }
+
+
+
+    public void validateProductType(Product baseProduct, Product materialProduct) {
+        if (baseProduct.getType().equals(ProductType.MATERIAL)) {
+            throw new NotFoundException(ResponseCode.INVALID_STORE_BASE);
+        }
+        if (materialProduct.getType().equals(ProductType.PRODUCT)) {
+            throw new NotFoundException(ResponseCode.INVALID_STORE_MATERIAL);
+        }
+    }
+
 }

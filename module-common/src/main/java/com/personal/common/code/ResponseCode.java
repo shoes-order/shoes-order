@@ -43,9 +43,12 @@ public enum ResponseCode {
     FORBIDDEN_STORES_USER("해당 가게 오너가 아닙니다."),
     FORBIDDEN_STORES_DELETE("해당 가게 삭제가 허용되지 않습니다."),
 
+
     //400
     INVALID_STOCK_QUNTITY("추가,감소할 수량은 0보다 커야 합니다."),
     INVALID_STOCK("재고가 부족하여 차감할 수 없습니다."),
+    INVALID_STORE_MATERIAL("해당 상품은 원자재가 아닙니다."),
+    INVALID_STORE_BASE("해당 상품은 완제품이 아닙니다."),
 
     //404
     NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
@@ -56,6 +59,8 @@ public enum ResponseCode {
     STORE_IS_DELETED("해당 매점은 삭제되었습니다."),
     NOT_FOUND_SHIPPING("배송현황이 없습니다."),
 
+    //409
+    DUPLICATE_PRODUCT("해당 BOM은 중복된 BOM입니다."),
     //500
     ILLEGAL_LOT("lot가 중복됩니다.");
 

@@ -16,7 +16,6 @@ public sealed interface InputhistoryRequest permits
             Long size,
             Long qty,
             Long price,
-            String lot,
             String description,
             LocalDate inputDate
 

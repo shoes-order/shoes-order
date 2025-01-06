@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,10 +36,15 @@ public class ProductBomService {
 
 
         // 해당가게에서 기본 제품 가져오기
-        Product baseProduct = productCommonService.getStoreProduct(storeId, createBom.baseProductId());
+        Product baseProduct = productCommonService.getStoreProduct(storeId, productId);
         // 해당가게에서 하위 제품 가져오기
         Product materialProduct = productCommonService.getStoreProduct(storeId, createBom.materialProductId());
 
+        // 상품 타입 검증
+        productCommonService.validateProductType(baseProduct, materialProduct);
+
+        // 해당 BOM이 존재하는지 확인
+        productBomCommonService.checkForDuplicateBom(productId, createBom.materialProductId());
         ProductBom productBom = ProductBom.builder()
                 .baseProduct(baseProduct)
                 .baseQty(createBom.baseProductQty())
@@ -53,14 +59,22 @@ public class ProductBomService {
     @Transactional
     public void updateBom(ProductBomRequest.UpdateBom updateBom, Long storeId, Long bomId, Long productId, AuthUser authUser) {
         Long userId = authUser.getUserId();
-        productBomRepository.validateAndFindBom(storeId, productId, bomId, userId)
+
+
+        //기존 BOM 확인
+        ProductBom productBom = productBomRepository.validateAndFindBom(storeId, productId, bomId, userId)
                 .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_PRODUCTBOM));
         // 해당가게에서 기본 제품 가져오기
-        Product baseProduct = productCommonService.getStoreProduct(storeId, updateBom.baseProductId());
+        Product baseProduct = productCommonService.getStoreProduct(storeId, productId);
         // 해당가게에서 하위 제품 가져오기
         Product materialProduct = productCommonService.getStoreProduct(storeId, updateBom.materialProductId());
 
-        ProductBom productBom = productBomCommonService.getBoms(bomId);
+        // 상품 타입 검증
+        productCommonService.validateProductType(baseProduct, materialProduct);
+
+        // 해당 BOM이 존재하는지 확인
+        productBomCommonService.checkForDuplicateBom(productId, updateBom.materialProductId());
+
         productBom.updateProductBom(
                 baseProduct,
                 updateBom.baseProductQty(),
@@ -93,13 +107,11 @@ public class ProductBomService {
 
     @Transactional
     public void deleteBom(Long storeId, Long productId, Long bomId, AuthUser authUser) {
-        // TODO : userId , storeId , productId , bomId 를 한번에 검증할수 있는 쿼리 구현
         Long userId = authUser.getUserId();
 
         ProductBom bom = productBomRepository.validateAndFindBom(storeId, productId, bomId, userId)
                 .orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_PRODUCTBOM));
 
-        // TODO : deleteById가 아닌 bomId로 pruductBom 객체를 조회해서 영속성 컨텍스트 생명주기로 영속시킨 다음에 삭제할 것
         productBomRepository.delete(bom);
     }
 }
