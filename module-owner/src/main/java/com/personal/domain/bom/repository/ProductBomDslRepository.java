@@ -14,4 +14,6 @@ public interface ProductBomDslRepository {
     Optional<ProductBom> validateAndFindBom(Long storeId, Long productId, Long bomId, Long userId);
 
     boolean existsBaseAndMaterial(Long productId, Long materialProductId);
+
+    boolean existsBaseAndMaterialAndBomId(Long productId, Long materialProductId, Long bomId);
 }

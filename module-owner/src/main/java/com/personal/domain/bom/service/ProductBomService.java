@@ -45,6 +45,7 @@ public class ProductBomService {
 
         // 해당 BOM이 존재하는지 확인
         productBomCommonService.checkForDuplicateBom(productId, createBom.materialProductId());
+
         ProductBom productBom = ProductBom.builder()
                 .baseProduct(baseProduct)
                 .baseQty(createBom.baseProductQty())
@@ -73,7 +74,11 @@ public class ProductBomService {
         productCommonService.validateProductType(baseProduct, materialProduct);
 
         // 해당 BOM이 존재하는지 확인
-        productBomCommonService.checkForDuplicateBom(productId, updateBom.materialProductId());
+        if (!productBom.getMaterialProduct().getId().equals(updateBom.materialProductId())) {
+            // 검증을 한다
+            productBomCommonService.checkForDuplicateBom(productId, updateBom.materialProductId());
+        }
+
 
         productBom.updateProductBom(
                 baseProduct,

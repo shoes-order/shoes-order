@@ -18,11 +18,18 @@ public class ProductBomCommonService {
                 .orElseThrow(() -> new NotFoundProductException(ResponseCode.NOT_FOUND_PRODUCTBOM));
     }
 
+
     public void checkForDuplicateBom(Long productId, Long materialProductId) {
         //중복 확인
         boolean exists = productBomRepository.existsBaseAndMaterial(productId,materialProductId);
         if (exists) {
             throw new ConflictException(ResponseCode.DUPLICATE_PRODUCT);
         }
+    }
+
+    // 수정할 때 bom값이 같은
+    public void checkForDuplicatesBom(Long productId, Long materialProductId, Long bomId) {
+        //중복 확인
+        boolean exists = productBomRepository.existsBaseAndMaterialAndBomId(productId,materialProductId,bomId);
     }
 }

@@ -66,5 +66,19 @@ public class ProductBomDslRepositoryImpl implements ProductBomDslRepository {
         return count != null && count > 0;
     }
 
+    @Override
+    public boolean existsBaseAndMaterialAndBomId(Long productId, Long materialProductId, Long bomId) {
+        Long count = queryFactory
+                .select(productBom.count())
+                .from(productBom)
+                .where(
+                        productBom.baseProduct.id.eq(productId),
+                        productBom.materialProduct.id.eq(materialProductId),
+                        productBom.id.ne(bomId)
+                )
+                .fetchOne();
+        return count != null && count > 0;
+    }
+
 
 }
