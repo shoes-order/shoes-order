@@ -74,16 +74,36 @@ public class BulkInsertTest {
     @Test
     public void test2() {
         List<Product> products = new ArrayList<>();
+        List<String> shoeNames = List.of(
+                "Air Max 90", "Yeezy Boost 350", "Stan Smith", "Superstar", "Chuck Taylor All Star",
+                "Old Skool", "Classic Slip-On", "Gel-Kayano", "Wave Rider", "Pegasus 39",
+                "Ultraboost", "Pureboost", "FuelCell Rebel", "ZoomX Vaporfly", "Metcon 8",
+                "GT-1000", "Trail Glove", "Fresh Foam 1080", "Ghost 15", "Clifton 9",
+                "Bondi 8", "Speedgoat 5", "Targhee III", "Moab 2", "Altra Lone Peak",
+                "Huarache", "Cortez", "Jordan 1", "LeBron 19", "Kyrie Infinity"
+        );
+        List<String> categories = List.of(
+                "Running Shoes", "Casual Sneakers", "Basketball Shoes", "Walking Shoes", "Training Shoes",
+                "Trail Shoes", "Lifestyle Shoes", "Performance Shoes", "Outdoor Shoes", "Athletic Shoes"
+        );
+        List<String> materials = List.of(
+                "Leather", "Synthetic Leather", "Mesh", "Knit Fabric", "Rubber", "Suede", 
+                "Canvas", "Nylon", "Polyurethane", "EVA Foam"
+        );
 
-        for (long i = 10001L; i <= 20000L; i++) {
+        for (long i = 300001L; i <= 600000L; i++) {
             Store store = storeRepository.findById(i).orElse(new Store());
             for (long j = 0L; j < 2L; j++) {
+                String randomName = shoeNames.get(RANDOM.nextInt(shoeNames.size()));
+                String randomCategory = categories.get(RANDOM.nextInt(categories.size()));
+                String randomMaterial = materials.get(RANDOM.nextInt(materials.size()));
+
                 Product product = Product.builder()
                         .store(store)
                         .type(ProductType.PRODUCT)
-                        .name("Product " + UUID.randomUUID().toString().substring(0, 8))
-                        .category("Category " + RANDOM.nextInt(5)) // 예시 카테고리
-                        .material("Material " + RANDOM.nextInt(3)) // 예시 재료
+                        .name(randomName + RANDOM.nextInt(8))
+                        .category(randomCategory + RANDOM.nextInt(5)) // 예시 카테고리
+                        .material(randomMaterial  +RANDOM.nextInt(3)) // 예시 재료
                         .basePrice(RANDOM.nextLong(10000, 100000)) // 예시 기본 가격
                         .customPrice(RANDOM.nextLong(10000, 100000)) // 예시 커스텀 가격
                         .description("Description for product " + i)
