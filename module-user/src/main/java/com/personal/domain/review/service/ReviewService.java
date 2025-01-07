@@ -2,6 +2,7 @@ package com.personal.domain.review.service;
 
 import com.personal.common.code.ResponseCode;
 import com.personal.common.entity.AuthUser;
+import com.personal.common.exception.custom.BadRequestException;
 import com.personal.common.exception.custom.ConflictException;
 import com.personal.common.exception.custom.ForbiddenException;
 import com.personal.common.exception.custom.NotFoundException;
@@ -12,6 +13,7 @@ import com.personal.domain.review.event.ReviewImageRemoveEvent;
 import com.personal.domain.review.event.ReviewImageSaveEvent;
 import com.personal.domain.review.event.ReviewImageUpdateEvent;
 import com.personal.domain.review.repository.ReviewRepository;
+import com.personal.entity.order.OrderStatus;
 import com.personal.entity.order.Orders;
 import com.personal.entity.review.Review;
 import com.personal.entity.review.ReviewImage;
@@ -41,13 +43,19 @@ public class ReviewService {
 
     @Transactional
     public void addReview(AuthUser authUser , Long orderId , ReviewRequest.AddReview addReview , List<MultipartFile> files) {
+        Orders orders = ordersCommonService.getOrderByOrdersIdAndUserId(orderId , authUser.getUserId());
+
+        // 주문이 완료된 건에 한해서만 리뷰 작성 가능!
+        if (!orders.getOrderStatus().equals(OrderStatus.COMPLETED)) {
+            throw new BadRequestException(ResponseCode.INVALID_REVIEW_ACCESS);
+        }
+
         // orders 기준으로 조회하여 리뷰가 등록되어있는지 아닌지 검증
         // ※ review가 등록되어 있다면 예외처리
         Review rv = reviewRepository.findByOrdersId(orderId);
         if (Objects.nonNull(rv)) {
             throw new ConflictException(ResponseCode.ALREADY_REGISTERED_REVIEW);
         }
-        Orders orders = ordersCommonService.getOrderByOrdersIdAndUserId(orderId , authUser.getUserId());
 
         // 리뷰 테이블 등록
         Review review = Review.builder()

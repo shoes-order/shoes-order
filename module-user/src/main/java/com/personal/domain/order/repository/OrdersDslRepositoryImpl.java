@@ -57,7 +57,7 @@ public class OrdersDslRepositoryImpl implements OrdersDslRepository {
                         user.id.eq(userId),
                         searchStartOrderDate(getOrder.startDate()),
                         searchEndOrderDate(getOrder.endDate()),
-                        searchOrderStatus(OrderStatus.of(getOrder.status()))
+                        searchOrderStatus(getOrder.status())
                 )
                 .orderBy(orders.updatedAt.desc())
                 .offset(pageable.getOffset())
@@ -72,7 +72,7 @@ public class OrdersDslRepositoryImpl implements OrdersDslRepository {
                         user.id.eq(userId),
                         searchStartOrderDate(getOrder.startDate()),
                         searchEndOrderDate(getOrder.endDate()),
-                        searchOrderStatus(OrderStatus.of(getOrder.status()))
+                        searchOrderStatus(getOrder.status())
                 )
                 .fetchOne();
 
@@ -87,7 +87,7 @@ public class OrdersDslRepositoryImpl implements OrdersDslRepository {
         return endDate != null ? orders.orderDate.loe(endDate) : null;
     }
 
-    private BooleanExpression searchOrderStatus(OrderStatus status) {
-        return status != null ? orders.orderStatus.eq(status) : null;
+    private BooleanExpression searchOrderStatus(String status) {
+        return status != null ? orders.orderStatus.eq(OrderStatus.of(status)) : null;
     }
 }

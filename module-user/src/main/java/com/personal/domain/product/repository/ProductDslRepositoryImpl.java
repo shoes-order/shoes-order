@@ -2,6 +2,7 @@ package com.personal.domain.product.repository;
 
 import com.personal.domain.product.dto.ProductRequest;
 import com.personal.domain.product.dto.ProductResponse;
+import com.personal.entity.product.ProductType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,8 +34,10 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
                 .innerJoin(store).on(store.id.eq(product.store.id))
                 .where(
                         store.id.eq(storeId) ,
+                        product.type.eq(ProductType.PRODUCT) ,
                         searchProducts(getProduct.type() , getProduct.value()) ,
-                        searchPrice(getProduct.minPrice(), getProduct.maxPrice())
+                        searchPrice(getProduct.minPrice(), getProduct.maxPrice()) ,
+                        product.isDeleted.eq(false)
                 )
                 .orderBy(getProduct.sort().equals("ASC") ? product.id.asc() : product.id.desc())
                 .fetch();

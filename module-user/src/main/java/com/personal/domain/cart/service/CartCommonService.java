@@ -24,7 +24,7 @@ public class CartCommonService {
         Long sum = 0L;
         for (CartList.Cart cart : cartList) {
             sum += cart.basePrice();
-            if (cart.customYN()) sum += cart.customPrice();
+            if (cart.customyn()) sum += cart.customPrice();
         }
         TotalResponse.TotalAmt totalAmt = new TotalResponse.TotalAmt(sum , 0L);
 

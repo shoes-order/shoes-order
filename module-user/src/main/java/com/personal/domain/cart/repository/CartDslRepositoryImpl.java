@@ -30,7 +30,7 @@ public class CartDslRepositoryImpl implements CartDslRepository {
                         cart.length,
                         cart.width,
                         cart.qty,
-                        cart.customYN,
+                        cart.customyn,
                         product.basePrice,
                         product.customPrice))
                 .from(cart)

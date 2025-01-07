@@ -27,7 +27,7 @@ public class Cart {
     private Long qty;
 
     @Column(nullable = false)
-    private boolean customYN;
+    private boolean customyn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id" , nullable = false)
@@ -46,23 +46,23 @@ public class Cart {
             Long length,
             Long width,
             Long qty,
-            boolean customYN,
+            boolean customyn,
             User user,
             Store store,
             Product product) {
         this.length = length;
         this.width = width;
         this.qty = qty;
-        this.customYN = customYN;
+        this.customyn = customyn;
         this.user = user;
         this.store = store;
         this.product = product;
     }
 
-    public void updateCart(Long length ,Long width , Long qty , boolean customYN) {
+    public void updateCart(Long length ,Long width , Long qty , boolean customyn) {
         this.length = length;
         this.width = width;
         this.qty = qty;
-        this.customYN = customYN;
+        this.customyn = customyn;
     }
 }

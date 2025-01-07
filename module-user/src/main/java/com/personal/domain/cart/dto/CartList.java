@@ -11,7 +11,7 @@ public sealed interface CartList permits
         Long length,
         Long width,
         Long qty,
-        boolean customYN,
+        boolean customyn,
         Long basePrice,
         Long customPrice
     ) implements CartList {
