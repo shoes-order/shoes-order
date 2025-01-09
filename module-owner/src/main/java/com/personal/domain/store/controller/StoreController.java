@@ -9,12 +9,11 @@ import com.personal.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -41,11 +40,12 @@ public class StoreController {
      * 매장 조회(자신이 등록한 매장들)
      */
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<StoreResponse.GetStores>>> getStores(
-            @AuthenticationPrincipal AuthUser authUser
+    public ResponseEntity<SuccessResponse<Page<StoreResponse.GetStores>>> getStores(
+            @AuthenticationPrincipal AuthUser authUser,
+            @ModelAttribute StoreRequest.GetStores getStores
     ) {
         return ResponseEntity.ok()
-                .body(SuccessResponse.of(storeService.getStores(authUser)));
+                .body(SuccessResponse.of(storeService.getStores(authUser, getStores)));
     }
 
     /**
@@ -53,11 +53,11 @@ public class StoreController {
      */
     @GetMapping("/{storeId}")
     public ResponseEntity<SuccessResponse<StoreResponse.GetStores>> getStore(
-            @AuthenticationPrincipal AuthUser authUser ,
+            @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long storeId
     ) {
 
-        return ResponseEntity.ok().body(SuccessResponse.of(storeService.getStore(authUser,storeId)));
+        return ResponseEntity.ok().body(SuccessResponse.of(storeService.getStore(authUser, storeId)));
     }
 
     /**

@@ -40,7 +40,7 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
                         searchProduct(getProducts.name(), getProducts.category()),
                         applyIsSoldCondition(getProducts.isSold())
                 )
-                .orderBy(getProducts.sort().equals("ASC") ? product.updatedAt.asc() : product.updatedAt.desc())
+                .orderBy(product.updatedAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -59,13 +59,15 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
     }
 
     private BooleanExpression searchProduct(String name, String category) {
+        BooleanExpression condition = null;
         if (name != null) {
-            return product.name.contains(name);
+            condition = product.name.contains(name);
         }
         if (category != null) {
-            return product.category.contains(category);
+            condition = condition != null ?
+                    condition.and(product.category.contains(category)) : product.category.contains(category);
         }
-        return null;
+        return condition;
     }
 
 

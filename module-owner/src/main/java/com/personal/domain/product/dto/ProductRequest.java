@@ -12,7 +12,6 @@ public sealed interface ProductRequest permits
             String name,
             String category,
             Boolean isSold,
-            String sort,
             Integer page,
             Integer size
     ) implements ProductRequest {

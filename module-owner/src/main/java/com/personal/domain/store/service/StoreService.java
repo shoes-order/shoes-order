@@ -11,10 +11,11 @@ import com.personal.entity.store.Store;
 import com.personal.entity.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -41,12 +42,19 @@ public class StoreService {
         storeRepository.save(store);
     }
 
-    public List<StoreResponse.GetStores> getStores(AuthUser authUser) {
+    public Page<StoreResponse.GetStores> getStores(AuthUser authUser, StoreRequest.GetStores getStores) {
         User user = ownerCommonService.getUserById(authUser.getUserId());
-        List<Store> storeList = storeRepository.findAllByUser(user);
-        return storeList.stream()
-                .map(store -> new StoreResponse.GetStores(store.getName(), store.getTel(), store.getZip(), store.getAddress(), store.getAddressDetail()))
-                .toList();
+        Pageable pageable = PageRequest.of(getStores.page() - 1, getStores.size());
+
+        Page<Store> storeList = storeRepository.findAllByUser(pageable, user);
+        return storeList.map(store -> new StoreResponse.GetStores
+                (
+                        store.getName(),
+                        store.getTel(),
+                        store.getZip(),
+                        store.getAddress(),
+                        store.getAddressDetail()
+                ));
     }
 
     public StoreResponse.GetStores getStore(AuthUser authUser, Long storeId) {
