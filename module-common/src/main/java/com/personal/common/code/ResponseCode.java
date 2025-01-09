@@ -31,6 +31,7 @@ public enum ResponseCode {
     NOT_FOUND_REVIEW("리뷰 정보를 찾을 수 없습니다."),
     INVALID_REVIEW_ACCESS("잘못된 리뷰 접근입니다."),
     ALREADY_REGISTERED_REVIEW("이미 등록된 리뷰가 있습니다."),
+    INVALID_IMAGE_ACCESS("잘못된 이미지 접근입니다."),
 
     //Owner Module Error
 

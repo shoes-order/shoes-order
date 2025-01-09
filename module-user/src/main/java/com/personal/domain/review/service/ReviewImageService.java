@@ -2,8 +2,10 @@ package com.personal.domain.review.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.personal.common.code.ResponseCode;
 import com.personal.common.component.FileManagement;
 import com.personal.common.dto.FileUploadDto;
+import com.personal.common.exception.custom.BadRequestException;
 import com.personal.domain.review.repository.ReviewImageRepository;
 import com.personal.entity.review.Review;
 import com.personal.entity.review.ReviewImage;
@@ -44,7 +46,7 @@ public class ReviewImageService {
                 });
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new BadRequestException(ResponseCode.INVALID_IMAGE_ACCESS);
         }
     }
 
@@ -63,7 +65,7 @@ public class ReviewImageService {
                 });
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new BadRequestException(ResponseCode.INVALID_IMAGE_ACCESS);
         }
     }
 
