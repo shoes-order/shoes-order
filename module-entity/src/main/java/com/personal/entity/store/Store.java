@@ -14,7 +14,13 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "store")
+@Table(name = "store" ,
+    indexes = {
+        @Index(
+                name = "idx_store_name_and_address_is_deleted",
+                columnList = "name , address , is_deleted"
+        )
+    })
 public class Store extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
