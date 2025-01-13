@@ -11,6 +11,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    @Cacheable(value = "stores", key = "#getStores.type + '_' + #getStores.value + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<StoreResponse.Infos> getStores(StoreRequest.GetStores getStores, Pageable pageable) {
 
         JPQLQuery<Long> productCnt = JPAExpressions
