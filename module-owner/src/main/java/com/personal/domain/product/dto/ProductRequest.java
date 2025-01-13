@@ -9,10 +9,9 @@ public sealed interface ProductRequest permits
         ProductRequest.AddProduct,
         ProductRequest.UpdateProduct {
     record GetProducts(
-            String type,
-            String value,
+            String name,
+            String category,
             Boolean isSold,
-            String sort,
             Integer page,
             Integer size
     ) implements ProductRequest {

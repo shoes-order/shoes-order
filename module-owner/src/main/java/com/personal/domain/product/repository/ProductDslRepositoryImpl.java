@@ -37,10 +37,10 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
                 .where(
                         product.store.id.eq(storeId),
                         product.isDeleted.eq(false),
-                        searchProduct(getProducts.type(), getProducts.value()),
+                        searchProduct(getProducts.name(), getProducts.category()),
                         applyIsSoldCondition(getProducts.isSold())
                 )
-                .orderBy(getProducts.sort().equals("ASC") ? product.updatedAt.asc() : product.updatedAt.desc())
+                .orderBy(product.updatedAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -51,22 +51,23 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
                 .where(
                         product.store.id.eq(storeId),
                         product.isDeleted.eq(false),
-                        searchProduct(getProducts.type(), getProducts.value()),
+                        searchProduct(getProducts.name(), getProducts.category()),
                         applyIsSoldCondition(getProducts.isSold())
                 )
                 .fetchOne();
         return new PageImpl<>(results, pageable, totalCount);
     }
 
-    private BooleanExpression searchProduct(String type, String value) {
-        switch (type) {
-            case ("name"):
-                return value != null ? product.name.contains(value) : null;
-            case ("category"):
-                return value != null ? product.category.contains(value) : null;
-            default:
-                return null;
+    private BooleanExpression searchProduct(String name, String category) {
+        BooleanExpression condition = null;
+        if (name != null) {
+            condition = product.name.contains(name);
         }
+        if (category != null) {
+            condition = condition != null ?
+                    condition.and(product.category.contains(category)) : product.category.contains(category);
+        }
+        return condition;
     }
 
 

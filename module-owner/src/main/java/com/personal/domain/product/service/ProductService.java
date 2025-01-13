@@ -9,6 +9,7 @@ import com.personal.domain.product.repository.ProductRepository;
 import com.personal.domain.store.exception.StoreOwnerMismatchException;
 import com.personal.domain.store.service.StoreCommonService;
 import com.personal.entity.product.Product;
+import com.personal.entity.product.ProductType;
 import com.personal.entity.store.Store;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +67,11 @@ public class ProductService {
         if (!authUser.getUserId().equals(store.getUser().getId())) {
             throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_ADD);
         }
+
+        if (addProduct.type().equals(ProductType.PRODUCT)) {
+            store.updateProductSaleCnt(store.getProductSaleCnt() + 1L);
+        }
+
         Product product = Product.builder()
                 .store(store)
                 .type(addProduct.type())
@@ -89,6 +95,14 @@ public class ProductService {
         }
         Product product = productCommonService.getStoreProduct(storeId, productId);
 
+        if (!product.getType().equals(updateProduct.type())) {
+            if (updateProduct.type().equals(ProductType.PRODUCT)) {
+                store.updateProductSaleCnt(store.getProductSaleCnt() + 1L);
+            } else {
+                store.updateProductSaleCnt(store.getProductSaleCnt() - 1L);
+            }
+        }
+
         product.updateProducts(
                 updateProduct.type(),
                 updateProduct.name(),
@@ -108,6 +122,11 @@ public class ProductService {
             throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_DELETE);
         }
         Product product = productCommonService.getStoreProduct(storeId, productId);
+
+        if (product.getType().equals(ProductType.PRODUCT)) {
+            store.updateProductSaleCnt(store.getProductSaleCnt() - 1L);
+        }
+
         product.updateIsDeleted(true);
     }
 
