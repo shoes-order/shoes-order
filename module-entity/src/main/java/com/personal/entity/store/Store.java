@@ -40,6 +40,9 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    @Column(nullable = false)
+    private Long productSaleCnt = 0L;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -69,5 +72,9 @@ public class Store extends BaseEntity {
 
     public void updateIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public void updateProductSaleCnt(Long productSaleCnt) {
+        this.productSaleCnt = productSaleCnt;
     }
 }
