@@ -5,6 +5,7 @@ import com.personal.domain.product.dto.ProductResponse;
 import com.personal.entity.product.ProductType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
         return switch (type) {
             case "name" -> product.name.contains(value);
             case "category" -> product.category.contains(value);
-            default -> null; // 타입이 잘못되었을 경우 null 반환
+            default -> Expressions.asBoolean(true); // 타입이 잘못되었을 경우 null 반환
         };
     }
 

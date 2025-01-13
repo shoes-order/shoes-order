@@ -5,6 +5,7 @@ import com.personal.domain.store.dto.StoreResponse;
 import com.personal.entity.product.ProductType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -80,7 +81,7 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
         return switch (type) {
             case "name" -> store.name.contains(value);
             case "address" -> store.address.contains(value);
-            default -> null; // 타입이 잘못되었을 경우 null 반환
+            default -> Expressions.asBoolean(true); // 타입이 잘못되었을 경우 null 반환
         };
     }
 }
