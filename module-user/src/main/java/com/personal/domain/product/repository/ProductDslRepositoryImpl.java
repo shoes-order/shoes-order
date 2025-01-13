@@ -52,7 +52,7 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
         return switch (type) {
             case "name" -> product.name.contains(value);
             case "category" -> product.category.contains(value);
-            default -> Expressions.asBoolean(true); // 타입이 잘못되었을 경우 null 반환
+            default -> Expressions.asBoolean(true);
         };
     }
 

@@ -81,7 +81,7 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
         return switch (type) {
             case "name" -> store.name.contains(value);
             case "address" -> store.address.contains(value);
-            default -> Expressions.asBoolean(true); // 타입이 잘못되었을 경우 null 반환
+            default -> Expressions.asBoolean(true);
         };
     }
 }
