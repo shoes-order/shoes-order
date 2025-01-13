@@ -32,13 +32,14 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
     @Cacheable(value = "stores", key = "#getStores.type + '_' + #getStores.value + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<StoreResponse.Infos> getStores(StoreRequest.GetStores getStores, Pageable pageable) {
 
-        JPQLQuery<Long> productCnt = JPAExpressions
-                .select(product.count())
-                .from(product)
-                .where(product.store.id.eq(store.id),
-                        product.type.eq(ProductType.PRODUCT),
-                        product.isDeleted.eq(false),
-                        product.isSold.eq(true));
+        // 서브쿼리였던 부분을 컬럼 추가 처리로 하여 성능 개선함
+//        JPQLQuery<Long> productCnt = JPAExpressions
+//                .select(product.count())
+//                .from(product)
+//                .where(product.store.id.eq(store.id),
+//                        product.type.eq(ProductType.PRODUCT),
+//                        product.isDeleted.eq(false),
+//                        product.isSold.eq(true));
 
         List<StoreResponse.Infos> results = queryFactory
                 .select(Projections.constructor(StoreResponse.Infos.class ,
@@ -49,7 +50,7 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
                         store.address ,
                         store.addressDetail ,
                         store.description ,
-                        productCnt
+                        store.productSaleCnt
                 ))
                 .from(store)
                 .where(
