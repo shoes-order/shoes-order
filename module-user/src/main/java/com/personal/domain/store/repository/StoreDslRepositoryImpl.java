@@ -72,15 +72,15 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
         return new PageImpl<>(results, pageable, totalCount);
     }
 
-    private BooleanExpression searchStores(String type , String value) {
-        if (Objects.nonNull(type)) {
-            return switch (type) {
-                case "name" -> value != null ? store.name.contains(value) : null;
-                case "address" -> value != null ? store.address.contains(value) : null;
-                default -> null;
-            };
-        } else {
-            return null;
+    private BooleanExpression searchStores(String type, String value) {
+        if (Objects.isNull(type) || Objects.isNull(value)) {
+            return null; // 조건이 없으면 null 반환 (전체 검색)
         }
+
+        return switch (type) {
+            case "name" -> store.name.contains(value);
+            case "address" -> store.address.contains(value);
+            default -> null; // 타입이 잘못되었을 경우 null 반환
+        };
     }
 }

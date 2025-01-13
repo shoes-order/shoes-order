@@ -44,15 +44,15 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
     }
 
     private BooleanExpression searchProducts(String type , String value) {
-        if (Objects.nonNull(type)) {
-            return switch (type) {
-                case "name" -> value != null ? product.name.contains(value) : null;
-                case "category" -> value != null ? product.category.contains(value) : null;
-                default -> null;
-            };
-        } else {
-            return null;
+        if (Objects.isNull(type) || Objects.isNull(value)) {
+            return null; // 조건이 없으면 null 반환 (전체 검색)
         }
+
+        return switch (type) {
+            case "name" -> product.name.contains(value);
+            case "category" -> product.category.contains(value);
+            default -> null; // 타입이 잘못되었을 경우 null 반환
+        };
     }
 
     private BooleanExpression searchPrice(Long minPrice , Long maxPrice) {
